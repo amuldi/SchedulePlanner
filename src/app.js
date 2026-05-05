@@ -101,7 +101,8 @@ function renderCalendar() {
   const first = new Date(y, m, 1);
   const startDate = add(first, -first.getDay());
   const label = new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "long" }).format(first);
-  document.getElementById("monthLabel").textContent = label;
+  const monthLabel = document.getElementById("monthLabel");
+  if (monthLabel) monthLabel.textContent = label;
   document.getElementById("calendarTitle").textContent = `${label} 캘린더`;
   const ps = projects(true);
   document.getElementById("calendar").innerHTML = Array.from({ length: 42 }, (_, i) => {

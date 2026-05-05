@@ -111,7 +111,7 @@ svg { width: 18px; height: 18px; fill: currentColor; }
 
 .workspace { display: grid; grid-template-columns: minmax(0, 3.9fr) repeat(2, minmax(290px, .64fr)); gap: 8px; align-items: stretch; }
 .panel { min-width: 0; border: 2px solid var(--ink); background: var(--paper); box-shadow: 0 14px 34px var(--shadow); }
-.calendar-panel, .workspace > aside.panel, .project-panel { min-height: 620px; }
+.calendar-panel, .workspace > aside.panel, .project-panel { min-height: 560px; }
 .project-panel { grid-column: auto; }
 .project-panel .panel-head { align-items: stretch; flex-direction: column; gap: 8px; }
 .project-panel h2 { white-space: nowrap; }
@@ -121,16 +121,14 @@ svg { width: 18px; height: 18px; fill: currentColor; }
   display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
   padding: 10px; border-bottom: 2px solid var(--ink);
 }
+.calendar-panel .panel-head { align-items: center; }
+.calendar-head-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.calendar-filter .segment { min-width: 56px; }
 .panel-head.compact { align-items: center; }
 h1, h2 { margin: 2px 0 0; font-size: clamp(1.42rem, 2.05vw, 2rem); font-weight: 950; line-height: .98; }
 h2 { font-size: clamp(1.1rem, 1.35vw, 1.45rem); }
 .calendar-panel h1 { font-size: clamp(1.45rem, 2vw, 2rem); white-space: nowrap; }
 .month-actions { display: flex; align-items: center; gap: 7px; }
-.calendar-toolbar {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 7px 10px; border-bottom: 2px solid var(--ink);
-}
-.month-label { font-size: 1.08rem; font-weight: 950; }
 .segmented { display: inline-flex; max-width: 100%; min-width: 0; border: 2px solid var(--ink); background: var(--paper); }
 .segment {
   min-width: 0; min-height: 32px; padding: 0 11px; border: 0; border-right: 2px solid var(--ink);
@@ -300,7 +298,9 @@ input:focus-visible, select:focus-visible, .color-button:focus-visible { outline
   .stat:nth-child(2n) { border-right: 0; }
   .stat-value { font-size: 2.35rem; }
   .project-form, .two { grid-template-columns: 1fr; }
-  .panel-head, .calendar-toolbar { align-items: stretch; flex-direction: column; }
+  .panel-head { align-items: stretch; flex-direction: column; }
+  .calendar-head-actions { align-items: stretch; flex-direction: column; }
+  .calendar-filter { width: 100%; }
   .panel-head { padding: 11px; }
   .month-actions { justify-content: space-between; }
   .segmented { width: 100%; }
