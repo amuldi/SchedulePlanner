@@ -68,7 +68,10 @@
         </div>
         <form class="agenda-form" id="eventForm">
           <input type="hidden" id="eventId">
-          <label><span>날짜</span><input id="eventDate" type="date" required></label>
+          <div class="date-range">
+            <label><span>날짜</span><input id="eventDate" type="date" required></label>
+            <label><span>종료</span><input id="eventEndDate" type="date" required></label>
+          </div>
           <div class="two">
             <label><span>시간</span><input id="eventTime" type="time" value="09:00" required></label>
             <label><span>분류</span><select id="eventType"><option value="work">작업</option><option value="meeting">미팅</option><option value="deadline">마감</option><option value="personal">약속</option><option value="todo">할일</option></select></label>

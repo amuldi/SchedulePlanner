@@ -198,6 +198,7 @@ input:focus-visible, select:focus-visible, .color-button:focus-visible { outline
 .agenda-form { padding: 12px 14px 8px; gap: 10px; }
 .agenda-form label { gap: 5px; }
 .agenda-form .primary { margin-top: 3px; }
+.date-range { display: grid; grid-template-columns: 1fr; gap: 8px; }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .agenda-form .two { grid-template-columns: 1fr; }
 .list { display: grid; gap: 0; padding: 8px 14px 14px; }
@@ -304,7 +305,7 @@ input:focus-visible, select:focus-visible, .color-button:focus-visible { outline
   .stat { min-height: 84px; }
   .stat:nth-child(2n) { border-right: 0; }
   .stat-value { font-size: 2.35rem; }
-  .project-form, .two { grid-template-columns: 1fr; }
+  .project-form, .two, .date-range { grid-template-columns: 1fr; }
   .panel-head { align-items: stretch; flex-direction: column; }
   .calendar-head-actions { align-items: stretch; flex-direction: column; }
   .calendar-filter { width: 100%; }
