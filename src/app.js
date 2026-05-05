@@ -50,6 +50,8 @@ function esc(v) { return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;"
 function format(v, weekday = true) { return new Intl.DateTimeFormat("ko-KR", { month: "long", day: "numeric", weekday: weekday ? "short" : undefined }).format(parse(v)); }
 function holiday(v) { return holidays[v] || fixed[v.slice(5)] || ""; }
 function eventEnd(e) { return e.endDate || e.date; }
+function eventFinishTime(e) { return e.endTime || e.time; }
+function timeRange(e) { const end = eventFinishTime(e); return end && end !== e.time ? e.time + " - " + end : e.time; }
 function eventRange(e) { const end = eventEnd(e); return end && end !== e.date ? " · " + format(e.date, false) + " - " + format(end, false) : ""; }
 function status(p) { if (p.status === "done") return "done"; if (todayISO < p.start) return "upcoming"; if (todayISO > p.end) return "overdue"; return "active"; }
 function statusText(s) { return ({ active: "진행", upcoming: "예정", overdue: "지연", done: "완료" })[s] || "진행"; }
@@ -65,7 +67,7 @@ function projects(forCalendar = false) {
     return s === f;
   }).sort((a,b) => a.start.localeCompare(b.start) || a.name.localeCompare(b.name));
 }
-function events(date) { return state.events.filter(e => between(date, e.date, eventEnd(e)) && match(`${e.title} ${e.type} ${eventEnd(e)}`)).sort((a,b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time) || a.title.localeCompare(b.title)); }
+function events(date) { return state.events.filter(e => between(date, e.date, eventEnd(e)) && match(`${e.title} ${e.type} ${e.time} ${eventFinishTime(e)} ${eventEnd(e)}`)).sort((a,b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time) || a.title.localeCompare(b.title)); }
 
 function render() {
   renderProfile(); renderStats(); renderCalendar(); renderAgenda(); renderProjects(); syncForms();
@@ -114,7 +116,7 @@ function renderCalendar() {
     const cls = ["day", d.getMonth() !== m ? "outside" : "", v === todayISO ? "today" : "", v === state.selected ? "selected" : "", d.getDay() === 0 ? "sunday" : "", h ? "holiday" : ""].filter(Boolean).join(" ");
     return `<button class="${cls}" type="button" data-date="${v}">
       <span class="day-top"><span class="num">${d.getDate()}</span><span class="meta">${esc(h)}</span></span>
-      ${dayEvents.slice(0,2).map(e => `<span class="event-chip">${esc(e.time)} ${esc(e.title)}</span>`).join("")}
+      ${dayEvents.slice(0,2).map(e => `<span class="event-chip">${esc(timeRange(e))} ${esc(e.title)}</span>`).join("")}
       <span class="bars">${dayProjects.slice(0,3).map(p => bar(p, v, d)).join("")}${dayProjects.length > 3 ? `<span class="more">+${dayProjects.length - 3}</span>` : ""}</span>
     </button>`;
   }).join("");
@@ -141,7 +143,7 @@ function renderAgenda() {
   const es = events(v);
   if (!es.length) { list.innerHTML = '<div class="empty">등록된 일정 없음</div>'; return; }
   list.innerHTML = es.map(e => `<article class="item ${e.done ? "done" : ""}">
-    <div class="item-main"><div class="copy"><strong class="title">${esc(e.title)}</strong><span class="sub">${esc(e.time)} · ${typeLabel[e.type] || "작업"}${eventRange(e)}</span></div>
+    <div class="item-main"><div class="copy"><strong class="title">${esc(e.title)}</strong><span class="sub">${esc(timeRange(e))} · ${typeLabel[e.type] || "작업"}${eventRange(e)}</span></div>
     <div class="actions"><button class="status-btn ${e.done ? "status-done" : "status-active"}" type="button" data-toggle-event="${e.id}">${e.done ? "완료" : "진행"}</button>
     <button class="row-btn" type="button" aria-label="수정" data-edit-event="${e.id}">${icon.edit}</button><button class="row-btn danger" type="button" aria-label="삭제" data-delete-event="${e.id}">${icon.trash}</button></div></div>
   </article>`).join("");
@@ -163,7 +165,7 @@ function renderProjects() {
 }
 function bindAgenda() {
   document.querySelectorAll("[data-toggle-event]").forEach(b => b.onclick = () => { state.events = state.events.map(e => e.id === b.dataset.toggleEvent ? { ...e, done: !e.done } : e); save(); render(); });
-  document.querySelectorAll("[data-edit-event]").forEach(b => b.onclick = () => { const e = state.events.find(x => x.id === b.dataset.editEvent); if (!e) return; eventId.value=e.id; eventDate.value=e.date; eventEndDate.value=eventEnd(e); eventEndDate.min=e.date; eventTime.value=e.time; eventType.value=e.type; eventTitle.value=e.title; eventSubmit.textContent="수정"; eventTitle.focus(); });
+  document.querySelectorAll("[data-edit-event]").forEach(b => b.onclick = () => { const e = state.events.find(x => x.id === b.dataset.editEvent); if (!e) return; eventId.value=e.id; eventDate.value=e.date; eventEndDate.value=eventEnd(e); eventEndDate.min=e.date; eventTime.value=e.time; eventEndTime.value=eventFinishTime(e); eventType.value=e.type; eventTitle.value=e.title; eventSubmit.textContent="수정"; eventTitle.focus(); });
   document.querySelectorAll("[data-delete-event]").forEach(b => b.onclick = () => { if (!confirm("이 일정을 삭제할까요?")) return; state.events = state.events.filter(e => e.id !== b.dataset.deleteEvent); save(); render(); toast("일정을 삭제했습니다"); });
 }
 function bindProjects() {
@@ -171,10 +173,17 @@ function bindProjects() {
   document.querySelectorAll("[data-edit-project]").forEach(b => b.onclick = () => { const p = state.projects.find(x => x.id === b.dataset.editProject); if (!p) return; projectId.value=p.id; projectName.value=p.name; projectStart.value=p.start; projectEnd.value=p.end; projectCategory.value=p.category; projectColor.value=p.color; syncColorPicker(p.color); projectSubmit.textContent="수정"; projectName.focus(); });
   document.querySelectorAll("[data-delete-project]").forEach(b => b.onclick = () => { if (!confirm("이 프로젝트를 삭제할까요?")) return; state.projects = state.projects.filter(p => p.id !== b.dataset.deleteProject); save(); render(); toast("프로젝트를 삭제했습니다"); });
 }
-function syncForms() {
-  eventDate.value = state.selected || todayISO;
+function syncEventBounds() {
   eventEndDate.min = eventDate.value || todayISO;
   if (!eventEndDate.value || eventEndDate.value < eventEndDate.min) eventEndDate.value = eventEndDate.min;
+  if (!eventEndTime.value) eventEndTime.value = eventTime.value || "09:00";
+  if (eventEndDate.value === eventDate.value && eventEndTime.value < eventTime.value) eventEndTime.value = eventTime.value;
+}
+function syncForms() {
+  const selected = state.selected || todayISO;
+  eventDate.value = selected;
+  if (!eventId.value) eventEndDate.value = selected;
+  syncEventBounds();
   if (!projectStart.value) projectStart.value = state.selected || todayISO;
   if (!projectEnd.value) projectEnd.value = state.selected || todayISO;
 }
@@ -207,10 +216,10 @@ prevMonth.onclick = () => { const d = new Date(state.viewYear, state.viewMonth -
 nextMonth.onclick = () => { const d = new Date(state.viewYear, state.viewMonth + 1, 1); state.viewYear = d.getFullYear(); state.viewMonth = d.getMonth(); save(); render(); };
 todayBtn.onclick = () => { state.selected = todayISO; state.viewYear = now.getFullYear(); state.viewMonth = now.getMonth(); save(); render(); };
 searchInput.oninput = e => { state.search = e.target.value; renderCalendar(); renderAgenda(); renderProjects(); };
-eventDate.addEventListener("change", () => {
-  eventEndDate.min = eventDate.value || todayISO;
-  if (!eventEndDate.value || eventEndDate.value < eventEndDate.min) eventEndDate.value = eventEndDate.min;
-});
+eventDate.addEventListener("change", syncEventBounds);
+eventEndDate.addEventListener("change", syncEventBounds);
+eventTime.addEventListener("change", syncEventBounds);
+eventEndTime.addEventListener("change", syncEventBounds);
 document.querySelectorAll("input[placeholder]").forEach(input => {
   const placeholder = input.placeholder;
   input.addEventListener("focus", () => { input.placeholder = ""; });
@@ -242,9 +251,10 @@ if (colorButtonEl) {
   syncColorPicker(initialColorInput ? initialColorInput.value : "lime");
 eventForm.onsubmit = e => {
   e.preventDefault();
-  const payload = { date: eventDate.value, endDate: eventEndDate.value || eventDate.value, time: eventTime.value, type: eventType.value, title: eventTitle.value.trim() };
+  const payload = { date: eventDate.value, endDate: eventEndDate.value || eventDate.value, time: eventTime.value, endTime: eventEndTime.value || eventTime.value, type: eventType.value, title: eventTitle.value.trim() };
   if (!payload.title) return;
   if (payload.endDate < payload.date) { toast("종료일을 시작일 이후로 선택하세요"); return; }
+  if (payload.endDate === payload.date && payload.endTime < payload.time) { toast("종료 시간을 시작 시간 이후로 선택하세요"); return; }
   if (eventId.value) { state.events = state.events.map(x => x.id === eventId.value ? { ...x, ...payload } : x); toast("일정을 수정했습니다"); }
   else { state.events.push({ id: id(), done: false, ...payload }); toast("일정을 추가했습니다"); }
   state.selected = payload.date; const d = parse(payload.date); state.viewYear = d.getFullYear(); state.viewMonth = d.getMonth();
