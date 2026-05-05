@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SchedulePlanner app icon">
+  <rect x="18" y="18" width="476" height="476" rx="112" fill="#183a55"/>
+  <rect x="34" y="34" width="444" height="444" rx="98" fill="#fffffb"/>
+  <rect x="72" y="86" width="368" height="340" rx="58" fill="#183a55"/>
+  <rect x="90" y="104" width="332" height="304" rx="42" fill="#fffdf0"/>
+  <path d="M90 146c0-23 19-42 42-42h248c23 0 42 19 42 42v78H90v-78Z" fill="#82b7dc"/>
+  <text x="174" y="363" fill="#183a55" font-family="Arial, Helvetica, sans-serif" font-size="178" font-weight="900">S</text>
+  <circle cx="382" cy="374" r="46" fill="#eaf6fd"/>
+  <path d="m357 373 19 19 40-51 17 14-54 69-39-37Z" fill="#3f8fbd"/>
+</svg>

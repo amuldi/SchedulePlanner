@@ -1,0 +1,29 @@
+{
+  "name": "SchedulePlanner",
+  "short_name": "Planner",
+  "description": "A compact magazine-inspired schedule and project calendar.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fffffb",
+  "theme_color": "#fffffb",
+  "icons": [
+    {
+      "src": "./assets/icons/favicon-blue.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-192-blue.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-512-blue.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
