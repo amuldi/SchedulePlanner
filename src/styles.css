@@ -124,6 +124,13 @@ svg { width: 18px; height: 18px; fill: currentColor; }
 .calendar-panel .panel-head { align-items: center; }
 .calendar-head-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
 .calendar-filter .segment { min-width: 56px; }
+.calendar-head-actions { --calendar-control-height: 42px; }
+.calendar-head-actions .segmented,
+.calendar-head-actions .icon-btn,
+.calendar-head-actions .text-btn { height: var(--calendar-control-height); min-height: var(--calendar-control-height); }
+.calendar-head-actions .segmented { align-items: stretch; }
+.calendar-head-actions .segment { height: 100%; min-height: 0; }
+.calendar-head-actions .text-btn { padding-top: 0; padding-bottom: 0; }
 .panel-head.compact { align-items: center; }
 h1, h2 { margin: 2px 0 0; font-size: clamp(1.42rem, 2.05vw, 2rem); font-weight: 950; line-height: .98; }
 h2 { font-size: clamp(1.1rem, 1.35vw, 1.45rem); }
