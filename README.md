@@ -2,7 +2,7 @@
 
 SchedulePlanner는 월간 캘린더, Agenda, Projects를 한 화면에서 다루는 데스크톱 중심 일정 관리 웹앱입니다. 밝은 아이보리 톤과 블루 포인트 컬러를 유지하면서 일정 입력, 검색, 드래그 앤 드롭, 웹 알림, 데이터 백업 흐름을 실제 서비스에 가깝게 다듬었습니다.
 
-[Production 사이트](https://design-schedule-deploy.vercel.app)
+[SchedulePlanner.site](https://design-schedule-deploy.vercel.app)
 
 ## 미리보기
 
