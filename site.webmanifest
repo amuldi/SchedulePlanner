@@ -4,23 +4,23 @@
   "description": "A compact magazine-inspired schedule and project calendar.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fffffb",
-  "theme_color": "#fffffb",
+  "background_color": "#f0eee8",
+  "theme_color": "#f0eee8",
   "icons": [
     {
-      "src": "./assets/icons/favicon-blue.svg",
+      "src": "./assets/icons/favicon-blue.svg?v=2",
       "sizes": "64x64",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "./assets/icons/icon-192-blue.png",
+      "src": "./assets/icons/icon-192-blue.png?v=2",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./assets/icons/icon-512-blue.png",
+      "src": "./assets/icons/icon-512-blue.png?v=2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
